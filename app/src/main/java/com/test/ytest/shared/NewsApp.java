@@ -2,6 +2,8 @@ package com.test.ytest.shared;
 
 import android.app.Application;
 
+import com.test.ytest.view.fragments.NewsFragment;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -12,18 +14,23 @@ import dagger.Component;
 
 public class NewsApp extends Application {
 
-    //public static ApplicationComponent graph = null;
+    private News news = null;
 
     @Singleton
     @Component(modules = { NewsModule.class })
     public interface News {
+
+        void inject(NewsFragment newsFragment);
+
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        News news = DaggerNewsApp_News.builder().build();
-     //   graph = DaggerApplicationComponent.builder().injectionModule(new InjectionModule(this)).build();
-      //  graph.inject(this)
+        news = DaggerNewsApp_News.builder().build();
+    }
+
+    public News getNews() {
+        return news;
     }
 }
