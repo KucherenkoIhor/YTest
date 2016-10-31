@@ -1,6 +1,9 @@
 package com.test.ytest.view.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -15,6 +18,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.test.ytest.R;
 import com.test.ytest.model.NewsItem;
+import com.test.ytest.shared.CustomTabActivityHelper;
+import com.test.ytest.shared.DateUtil;
+import com.test.ytest.shared.WebViewFallback;
 import com.test.ytest.view.activities.DetailInfoActivity;
 
 import java.util.List;
@@ -47,7 +53,18 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
         NewsItem newsItem = dataSource.get(position);
         holder.bind(newsItem);
         holder.itemView.setOnClickListener(view -> {
-            DetailInfoActivity.start(holder.itemView.getContext(), newsItem.getWebURL());
+            Context context = holder.itemView.getContext();
+            int primaryColor = ContextCompat.getColor(
+                    context,
+                    R.color.colorPrimary);
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                    .setToolbarColor(primaryColor)
+                    .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
+                    .build();
+
+            CustomTabActivityHelper.openCustomTab(
+                    holder.itemView.getContext(), customTabsIntent, newsItem.getWebURL(), new WebViewFallback());
         });
 
     }
@@ -77,8 +94,8 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
 
         public void bind(NewsItem newsItem) {
             headLineTextView.setText(newsItem.getHeadLine());
-            agencyTextView.setText(newsItem.getAgency());
-            dateTextView.setText(newsItem.getDateLine());
+            agencyTextView.setText(itemView.getResources().getString(R.string.view_news_item_agency, newsItem.getAgency()));
+            dateTextView.setText(DateUtil.formatDate(newsItem.getDateLine()));
             captionTextView.setText(newsItem.getCaption());
             Glide.with(itemView.getContext())
                     .load(newsItem.getImage().getThumb())
