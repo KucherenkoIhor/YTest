@@ -26,7 +26,7 @@ public class NewsPresenter {
     public void setNewsApiInterface(NewsApiInterface newsApiInterface) {
         this.newsApiInterface = newsApiInterface;
     }
-
+//https://github.com/ArturVasilov/AndroidSchool/tree/master/GithubMVP/app/src/main/java/ru/gdgkazan/githubmvp
     public void loadNews() {
         newsSubscription = newsApiInterface
                 .getNews()
