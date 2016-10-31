@@ -1,6 +1,7 @@
 package com.test.ytest.view.adapters;
 
 import android.graphics.Bitmap;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -15,7 +16,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.test.ytest.R;
 import com.test.ytest.model.NewsItem;
+import com.test.ytest.shared.CustomTabActivityHelper;
 import com.test.ytest.shared.DateUtil;
+import com.test.ytest.shared.WebViewFallback;
 import com.test.ytest.view.activities.DetailInfoActivity;
 
 import java.util.List;
@@ -48,7 +51,9 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
         NewsItem newsItem = dataSource.get(position);
         holder.bind(newsItem);
         holder.itemView.setOnClickListener(view -> {
-            DetailInfoActivity.start(holder.itemView.getContext(), newsItem.getWebURL());
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+            CustomTabActivityHelper.openCustomTab(
+                    holder.itemView.getContext(), customTabsIntent, newsItem.getWebURL(), new WebViewFallback());
         });
 
     }
