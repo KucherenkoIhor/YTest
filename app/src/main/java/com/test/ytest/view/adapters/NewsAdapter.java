@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.test.ytest.R;
 import com.test.ytest.model.NewsItem;
+import com.test.ytest.shared.DateUtil;
 import com.test.ytest.view.activities.DetailInfoActivity;
 
 import java.util.List;
@@ -77,8 +78,8 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
 
         public void bind(NewsItem newsItem) {
             headLineTextView.setText(newsItem.getHeadLine());
-            agencyTextView.setText(newsItem.getAgency());
-            dateTextView.setText(newsItem.getDateLine());
+            agencyTextView.setText(itemView.getResources().getString(R.string.view_news_item_agency, newsItem.getAgency()));
+            dateTextView.setText(DateUtil.formatDate(newsItem.getDateLine()));
             captionTextView.setText(newsItem.getCaption());
             Glide.with(itemView.getContext())
                     .load(newsItem.getImage().getThumb())
