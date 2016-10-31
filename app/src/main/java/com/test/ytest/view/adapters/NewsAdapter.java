@@ -21,7 +21,6 @@ import com.test.ytest.model.NewsItem;
 import com.test.ytest.shared.CustomTabActivityHelper;
 import com.test.ytest.shared.DateUtil;
 import com.test.ytest.shared.WebViewFallback;
-import com.test.ytest.view.activities.DetailInfoActivity;
 
 import java.util.List;
 
@@ -64,7 +63,10 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
                     .build();
 
             CustomTabActivityHelper.openCustomTab(
-                    holder.itemView.getContext(), customTabsIntent, newsItem.getWebURL(), new WebViewFallback());
+                    holder.itemView.getContext(),
+                    customTabsIntent,
+                    newsItem.getWebURL(),
+                    new WebViewFallback());
         });
 
     }

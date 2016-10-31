@@ -1,38 +1,32 @@
 package com.test.ytest.shared;
 
-import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsServiceConnection;
-import android.support.customtabs.CustomTabsSession;
-
-import java.util.List;
 
 /**
  * This is a helper class to manage the connection to the Custom Tabs Service.
  */
 public class CustomTabActivityHelper {
 
-    public static void openCustomTab(Activity activity,
+    public static void openCustomTab(Context context,
                                      CustomTabsIntent customTabsIntent,
                                      String url,
                                      CustomTabFallback fallback) {
-        String packageName = CustomTabsHelper.getPackageNameToUse(activity);
+        String packageName = CustomTabsHelper.getPackageNameToUse(context);
 
         if (packageName == null) {
             if (fallback != null) {
-                fallback.openUri(activity, url);
+                fallback.openUri(context, url);
             }
         } else {
             customTabsIntent.intent.setPackage(packageName);
-            customTabsIntent.launchUrl(activity, Uri.parse(url));
+            customTabsIntent.launchUrl(context, Uri.parse(url));
         }
     }
 
     public interface CustomTabFallback {
-        void openUri(Activity activity, String url);
+        void openUri(Context context, String url);
     }
 
 }
