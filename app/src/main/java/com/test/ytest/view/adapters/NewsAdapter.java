@@ -1,7 +1,9 @@
 package com.test.ytest.view.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -51,7 +53,16 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
         NewsItem newsItem = dataSource.get(position);
         holder.bind(newsItem);
         holder.itemView.setOnClickListener(view -> {
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+            Context context = holder.itemView.getContext();
+            int primaryColor = ContextCompat.getColor(
+                    context,
+                    R.color.colorPrimary);
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                    .setToolbarColor(primaryColor)
+                    .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
+                    .build();
+
             CustomTabActivityHelper.openCustomTab(
                     holder.itemView.getContext(), customTabsIntent, newsItem.getWebURL(), new WebViewFallback());
         });
