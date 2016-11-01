@@ -49,7 +49,6 @@ public class NewsPresenter {
         mNewsApiInterface
                 .getNews()
                 .map(NewsResponse::getNewsItem)
-                .doOnTerminate(mNewsView::hideLoading)
                 .flatMap(items -> {
                     Realm.getDefaultInstance().executeTransaction(realm -> {
                         realm.delete(NewsItem.class);
@@ -63,6 +62,7 @@ public class NewsPresenter {
                     return Observable.just(realm.copyFromRealm(items));
                 })
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate(mNewsView::hideLoading)
                 .compose(mLifecycleHandler.load(R.id.news_request))
                 .subscribe(mNewsView::onNewsItemLoaded, mNewsView::onError);
     }

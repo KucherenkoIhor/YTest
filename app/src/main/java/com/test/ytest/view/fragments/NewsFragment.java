@@ -54,6 +54,8 @@ public class NewsFragment extends Fragment
     @BindView(R.id.swipe_layout)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private NewsAdapter mNewsAdapter = new NewsAdapter();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +85,7 @@ public class NewsFragment extends Fragment
         mNewsPresenter.loadNews();
         prepareSwipeRefreshLayout();
         prepareRecyclerView();
-
+        mRecyclerView.setAdapter(mNewsAdapter);
     }
 
     private void prepareSwipeRefreshLayout() {
@@ -104,9 +106,7 @@ public class NewsFragment extends Fragment
             return;
         }
         statusTextView.setText(null);
-        NewsAdapter newsAdapter = new NewsAdapter();
-        mRecyclerView.setAdapter(newsAdapter);
-        newsAdapter.setDataSource(newsItems);
+        mNewsAdapter.setDataSource(newsItems);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -118,6 +118,7 @@ public class NewsFragment extends Fragment
     @Override
     public void onError(Throwable throwable) {
         progressBar.setVisibility(View.GONE);
+        Log.e("AAAA", "onError");
         if (throwable instanceof IOException) {
             statusTextView.setText(R.string.connection_error);
         } else {
@@ -127,6 +128,7 @@ public class NewsFragment extends Fragment
 
     @Override
     public void hideLoading() {
+        Log.e("AAAA", "hideLoading");
         progressBar.setVisibility(View.GONE);
     }
 }

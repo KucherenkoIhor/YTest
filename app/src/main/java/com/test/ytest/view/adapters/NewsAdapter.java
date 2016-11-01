@@ -74,6 +74,8 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
 
     @Override
     public int getItemCount() {
+        if(mDataSource == null)
+            return 0;
         return mDataSource.size();
     }
 
