@@ -44,7 +44,7 @@ public class NewsPresenter {
     public void setNewsApiInterface(NewsApiInterface newsApiInterface) {
         this.mNewsApiInterface = newsApiInterface;
     }
-//https://github.com/ArturVasilov/AndroidSchool/tree/master/GithubMVP/app/src/main/java/ru/gdgkazan/githubmvp
+
     public void loadNews() {
         mNewsApiInterface
                 .getNews()
@@ -62,8 +62,8 @@ public class NewsPresenter {
                     return Observable.just(realm.copyFromRealm(items));
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate(mNewsView::hideLoading)
                 .compose(mLifecycleHandler.load(R.id.news_request))
+                .doOnTerminate(mNewsView::hideLoading)
                 .subscribe(mNewsView::onNewsItemLoaded, mNewsView::onError);
     }
 

@@ -56,6 +56,8 @@ public class NewsFragment extends Fragment
 
     private NewsAdapter mNewsAdapter = new NewsAdapter();
 
+    private LifecycleHandler mLifecycleHandler = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,10 +80,10 @@ public class NewsFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LifecycleHandler lifecycleHandler = LoaderLifecycleHandler.create(
+        mLifecycleHandler = LoaderLifecycleHandler.create(
                 getActivity(),
                 getActivity().getSupportLoaderManager());
-        mNewsPresenter.onViewCreated(lifecycleHandler, this);
+        mNewsPresenter.onViewCreated(mLifecycleHandler, this);
         mNewsPresenter.loadNews();
         prepareSwipeRefreshLayout();
         prepareRecyclerView();
@@ -101,13 +103,15 @@ public class NewsFragment extends Fragment
 
     @Override
     public void onNewsItemLoaded(List<NewsItem> newsItems) {
+        mLifecycleHandler.clear(R.id.news_request);
+        mSwipeRefreshLayout.setRefreshing(false);
+        progressBar.setVisibility(View.GONE);
         if(newsItems.isEmpty()) {
             statusTextView.setText(R.string.list_is_empty);
             return;
         }
         statusTextView.setText(null);
         mNewsAdapter.setDataSource(newsItems);
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -117,8 +121,9 @@ public class NewsFragment extends Fragment
 
     @Override
     public void onError(Throwable throwable) {
+        mLifecycleHandler.clear(R.id.news_request);
+        mSwipeRefreshLayout.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
-        Log.e("AAAA", "onError");
         if (throwable instanceof IOException) {
             statusTextView.setText(R.string.connection_error);
         } else {
@@ -128,7 +133,8 @@ public class NewsFragment extends Fragment
 
     @Override
     public void hideLoading() {
-        Log.e("AAAA", "hideLoading");
+        mLifecycleHandler.clear(R.id.news_request);
+        mSwipeRefreshLayout.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
     }
 }
