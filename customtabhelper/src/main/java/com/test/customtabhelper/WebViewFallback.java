@@ -1,9 +1,7 @@
-package com.test.ytest.shared;
+package com.test.customtabhelper;
 
 import android.content.Context;
 import android.content.Intent;
-
-import com.test.ytest.view.activities.WebViewActivity;
 
 public class WebViewFallback implements CustomTabActivityHelper.CustomTabFallback {
 

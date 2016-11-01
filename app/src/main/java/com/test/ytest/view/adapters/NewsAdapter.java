@@ -16,11 +16,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.test.customtabhelper.CustomTabActivityHelper;
+import com.test.customtabhelper.WebViewFallback;
 import com.test.ytest.R;
 import com.test.ytest.model.NewsItem;
-import com.test.ytest.shared.CustomTabActivityHelper;
 import com.test.ytest.shared.DateUtil;
-import com.test.ytest.shared.WebViewFallback;
+
 
 import java.util.List;
 
@@ -33,10 +34,10 @@ import butterknife.ButterKnife;
 
 public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
 
-    private List<NewsItem> dataSource = null;
+    private List<NewsItem> mDataSource = null;
 
     public void setDataSource(List<NewsItem> dataSource) {
-        this.dataSource = dataSource;
+        this.mDataSource = dataSource;
         notifyDataSetChanged();
     }
 
@@ -49,7 +50,7 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
 
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
-        NewsItem newsItem = dataSource.get(position);
+        NewsItem newsItem = mDataSource.get(position);
         holder.bind(newsItem);
         holder.itemView.setOnClickListener(view -> {
             Context context = holder.itemView.getContext();
@@ -73,7 +74,7 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
 
     @Override
     public int getItemCount() {
-        return dataSource.size();
+        return mDataSource.size();
     }
 
     static class NewsViewHolder extends ViewHolder {
@@ -96,9 +97,18 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
 
         public void bind(NewsItem newsItem) {
             headLineTextView.setText(newsItem.getHeadLine());
-            agencyTextView.setText(itemView.getResources().getString(R.string.view_news_item_agency, newsItem.getAgency()));
+
+            if(newsItem.getAgency() != null)
+                agencyTextView.setVisibility(View.GONE);
+            else
+                agencyTextView.setText(itemView.getResources().getString(
+                        R.string.view_news_item_agency,
+                        newsItem.getAgency()));
+
             dateTextView.setText(DateUtil.formatDate(newsItem.getDateLine()));
+
             captionTextView.setText(newsItem.getCaption());
+
             Glide.with(itemView.getContext())
                     .load(newsItem.getImage().getThumb())
                     .asBitmap()

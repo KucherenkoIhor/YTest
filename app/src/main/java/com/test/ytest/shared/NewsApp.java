@@ -16,7 +16,7 @@ import io.realm.RealmConfiguration;
 
 public class NewsApp extends Application {
 
-    private News news = null;
+    private News mNews = null;
 
     @Singleton
     @Component(modules = { NewsModule.class })
@@ -29,7 +29,7 @@ public class NewsApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        news = DaggerNewsApp_News.builder().build();
+        mNews = DaggerNewsApp_News.builder().build();
 
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder().build();
@@ -37,6 +37,6 @@ public class NewsApp extends Application {
     }
 
     public News getNews() {
-        return news;
+        return mNews;
     }
 }

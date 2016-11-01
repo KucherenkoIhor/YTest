@@ -1,4 +1,4 @@
-package com.test.ytest.view;
+package com.test.ytest.view.interfaces;
 
 import com.test.ytest.model.NewsItem;
 
@@ -12,4 +12,7 @@ public interface NewsView {
 
     void onNewsItemLoaded(List<NewsItem> newsItems);
 
+    void onError(Throwable throwable);
+
+    void hideLoading();
 }

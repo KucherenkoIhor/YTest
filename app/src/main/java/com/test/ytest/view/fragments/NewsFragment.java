@@ -4,49 +4,61 @@ package com.test.ytest.view.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.test.ytest.R;
 import com.test.ytest.model.NewsItem;
 import com.test.ytest.presenter.NewsPresenter;
 import com.test.ytest.shared.NewsApiInterface;
 import com.test.ytest.shared.NewsApp;
-import com.test.ytest.view.NewsView;
+import com.test.ytest.view.interfaces.NewsView;
 import com.test.ytest.view.adapters.NewsAdapter;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.arturvasilov.rxloader.LifecycleHandler;
+import ru.arturvasilov.rxloader.LoaderLifecycleHandler;
 
 public class NewsFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener,
         NewsView {
 
     @Inject
-    protected NewsPresenter newsPresenter;
+    protected NewsPresenter mNewsPresenter;
     @Inject
-    protected NewsApiInterface newsAPI;
+    protected NewsApiInterface mNewsAPI;
 
+    @BindView(R.id.progress_bar)
+    protected ProgressBar progressBar;
+    @BindView(R.id.status_text_view)
+    protected TextView statusTextView;
     @BindView(R.id.recycler_view)
-    protected RecyclerView recyclerView;
+    protected RecyclerView mRecyclerView;
     @BindView(R.id.swipe_layout)
-    protected SwipeRefreshLayout swipeRefreshLayout;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inject();
-        newsPresenter.setNewsApiInterface(newsAPI);
+        mNewsPresenter.setNewsApiInterface(mNewsAPI);
     }
 
     private void inject() {
@@ -64,40 +76,57 @@ public class NewsFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        newsPresenter.onViewCreated(this);
-        newsPresenter.loadNews();
+        LifecycleHandler lifecycleHandler = LoaderLifecycleHandler.create(
+                getActivity(),
+                getActivity().getSupportLoaderManager());
+        mNewsPresenter.onViewCreated(lifecycleHandler, this);
+        mNewsPresenter.loadNews();
         prepareSwipeRefreshLayout();
         prepareRecyclerView();
 
     }
 
     private void prepareSwipeRefreshLayout() {
-        swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
-        swipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     private void prepareRecyclerView() {
         final LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
     }
 
     @Override
     public void onNewsItemLoaded(List<NewsItem> newsItems) {
+        if(newsItems.isEmpty()) {
+            statusTextView.setText(R.string.list_is_empty);
+            return;
+        }
+        statusTextView.setText(null);
         NewsAdapter newsAdapter = new NewsAdapter();
-        recyclerView.setAdapter(newsAdapter);
+        mRecyclerView.setAdapter(newsAdapter);
         newsAdapter.setDataSource(newsItems);
-        swipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onRefresh() {
-        newsPresenter.loadNews();
+        mNewsPresenter.loadNews();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        newsPresenter.onDestroyView();
+    public void onError(Throwable throwable) {
+        progressBar.setVisibility(View.GONE);
+        if (throwable instanceof IOException) {
+            statusTextView.setText(R.string.connection_error);
+        } else {
+            statusTextView.setText(R.string.list_is_empty);
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        progressBar.setVisibility(View.GONE);
     }
 }

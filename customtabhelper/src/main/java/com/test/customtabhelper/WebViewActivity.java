@@ -1,4 +1,4 @@
-package com.test.ytest.view.activities;
+package com.test.customtabhelper;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,6 @@ import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.test.ytest.R;
 
 public class WebViewActivity extends AppCompatActivity {
 
