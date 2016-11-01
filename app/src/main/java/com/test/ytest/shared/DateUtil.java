@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 import static com.test.ytest.shared.Constants.DATE_PATTERN;
 import static com.test.ytest.shared.Constants.IST_TIME_ZONE;
+import static com.test.ytest.shared.Constants.LEADING_ZERO_TEMPLATE;
 
 /**
  * Created by polyakov on 31.10.16.
@@ -37,9 +38,9 @@ public class DateUtil {
                     .append(" ")
                     .append(month)
                     .append(" ")
-                    .append(hours)
+                    .append(String.format(Locale.getDefault(), LEADING_ZERO_TEMPLATE, hours))
                     .append(":")
-                    .append(minutes)
+                    .append(String.format(Locale.getDefault(), LEADING_ZERO_TEMPLATE, minutes))
                     .toString();
         } catch (Exception e) {
             e.printStackTrace();

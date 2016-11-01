@@ -10,5 +10,6 @@ public class Constants {
     public static final String DATE_PATTERN = "MMM dd, yyyy, hh.mma";
     public static final String IST_TIME_ZONE = "IST";
 
-    public static final long REQUEST_TIMEOUT = 10;
+
+    public static final String LEADING_ZERO_TEMPLATE = "%02d";
 }

@@ -82,15 +82,15 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
     static class NewsViewHolder extends ViewHolder {
 
         @BindView(R.id.image_view)
-        protected ImageView imageView;
+        ImageView imageView;
         @BindView(R.id.headLineTextView)
-        protected TextView headLineTextView;
+        TextView headLineTextView;
         @BindView(R.id.agencyTextView)
-        protected TextView agencyTextView;
+        TextView agencyTextView;
         @BindView(R.id.dateTextView)
-        protected TextView dateTextView;
+        TextView dateTextView;
         @BindView(R.id.captionTextView)
-        protected TextView captionTextView;
+        TextView captionTextView;
 
         NewsViewHolder(View itemView) {
             super(itemView);
