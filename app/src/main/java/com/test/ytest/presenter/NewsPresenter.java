@@ -1,9 +1,13 @@
 package com.test.ytest.presenter;
 
+import com.test.ytest.model.NewsItem;
 import com.test.ytest.model.NewsResponse;
 import com.test.ytest.shared.NewsApiInterface;
 import com.test.ytest.view.NewsView;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -31,7 +35,18 @@ public class NewsPresenter {
         newsSubscription = newsApiInterface
                 .getNews()
                 .map(NewsResponse::getNewsItem)
-                .doOnError(Throwable::printStackTrace)
+                .flatMap(items -> {
+                    Realm.getDefaultInstance().executeTransaction(realm -> {
+                        realm.delete(NewsItem.class);
+                        realm.insert(items);
+                    });
+                    return Observable.just(items);
+                })
+                .onErrorResumeNext(throwable -> {
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmResults<NewsItem> items = realm.where(NewsItem.class).findAll();
+                    return Observable.just(realm.copyFromRealm(items));
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::onNewsItemLoaded, Throwable::printStackTrace);
     }

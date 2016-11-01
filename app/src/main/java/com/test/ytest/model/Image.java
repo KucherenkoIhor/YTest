@@ -3,10 +3,9 @@ package com.test.ytest.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
+import io.realm.RealmObject;
 
-@Generated("org.jsonschema2pojo")
-public class Image {
+public class Image extends RealmObject {
 
     @SerializedName("Photo")
     @Expose

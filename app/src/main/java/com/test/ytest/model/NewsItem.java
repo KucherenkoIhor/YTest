@@ -3,10 +3,9 @@ package com.test.ytest.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
+import io.realm.RealmObject;
 
-@Generated("org.jsonschema2pojo")
-public class NewsItem {
+public class NewsItem extends RealmObject {
 
     @SerializedName("NewsItemId")
     @Expose

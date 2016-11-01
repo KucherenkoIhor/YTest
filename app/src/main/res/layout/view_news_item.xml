@@ -27,17 +27,17 @@
             android:id="@+id/headLineTextView" />
 
         <TextView
+            android:maxLines="3"
+            style="@style/NewsItemContentStyle"
+            android:id="@+id/captionTextView"/>
+
+        <TextView
             style="@style/NewsItemContentStyle"
             android:id="@+id/agencyTextView"/>
 
         <TextView
             style="@style/NewsItemContentStyle"
             android:id="@+id/dateTextView"/>
-
-        <TextView
-            android:maxLines="3"
-            style="@style/NewsItemContentStyle"
-            android:id="@+id/captionTextView"/>
 
     </LinearLayout>
 

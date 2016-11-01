@@ -7,6 +7,8 @@ import com.test.ytest.view.fragments.NewsFragment;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by igor on 29.10.16.
@@ -29,9 +31,9 @@ public class NewsApp extends Application {
         super.onCreate();
         news = DaggerNewsApp_News.builder().build();
 
-      /*  Realm.init(this);
+        Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder().build();
-        Realm.setDefaultConfiguration(config);*/
+        Realm.setDefaultConfiguration(config);
     }
 
     public News getNews() {
