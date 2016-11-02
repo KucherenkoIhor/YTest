@@ -100,7 +100,7 @@ public class NewsAdapter extends Adapter<NewsAdapter.NewsViewHolder> {
         public void bind(NewsItem newsItem) {
             headLineTextView.setText(newsItem.getHeadLine());
 
-            if(newsItem.getAgency() != null)
+            if(newsItem.getAgency() == null)
                 agencyTextView.setVisibility(View.GONE);
             else
                 agencyTextView.setText(itemView.getResources().getString(

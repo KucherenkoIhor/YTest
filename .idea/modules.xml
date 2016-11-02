@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/YTest.iml" filepath="$PROJECT_DIR$/YTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/customtabhelper/customtabhelper.iml" filepath="$PROJECT_DIR$/customtabhelper/customtabhelper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/customtabhelper/customtabhelper.iml" filepath="$PROJECT_DIR$/customtabhelper/customtabhelper.iml" />
     </modules>
   </component>
 </project>
