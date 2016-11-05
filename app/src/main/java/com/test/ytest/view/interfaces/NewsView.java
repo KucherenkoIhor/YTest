@@ -15,4 +15,5 @@ public interface NewsView {
     void onError(Throwable throwable);
 
     void hideLoading();
+
 }

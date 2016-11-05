@@ -4,29 +4,31 @@ package com.test.ytest.view.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.test.customtabhelper.CustomTabActivityHelper;
+import com.test.customtabhelper.WebViewFallback;
 import com.test.ytest.R;
 import com.test.ytest.model.NewsItem;
 import com.test.ytest.presenter.NewsPresenter;
 import com.test.ytest.shared.NewsApiInterface;
 import com.test.ytest.shared.NewsApp;
-import com.test.ytest.view.interfaces.NewsView;
 import com.test.ytest.view.adapters.NewsAdapter;
+import com.test.ytest.view.adapters.NewsAdapter.NewsViewHolder;
+import com.test.ytest.view.interfaces.NewsView;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -112,7 +114,29 @@ public class NewsFragment extends Fragment
         }
         statusTextView.setText(null);
         mNewsAdapter.setDataSource(newsItems);
+        mNewsAdapter.setOnItemClickListener(mOnItemClickListener);
     }
+
+    private View.OnClickListener mOnItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            NewsViewHolder holder = (NewsViewHolder) mRecyclerView.getChildViewHolder(view);
+            int primaryColor = ContextCompat.getColor(
+                    getActivity(),
+                    R.color.colorPrimary);
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                    .setToolbarColor(primaryColor)
+                    .setStartAnimations(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left)
+                    .setExitAnimations(getActivity(), R.anim.slide_in_left, R.anim.slide_out_right)
+                    .build();
+            CustomTabActivityHelper.openCustomTab(
+                    getActivity(),
+                    customTabsIntent,
+                    holder.getNewsItem().getWebURL(),
+                    new WebViewFallback());
+
+        }
+    };
 
     @Override
     public void onRefresh() {
