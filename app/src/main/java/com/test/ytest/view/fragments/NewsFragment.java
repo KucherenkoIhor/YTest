@@ -162,4 +162,5 @@ public class NewsFragment extends Fragment
         mSwipeRefreshLayout.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
     }
+
 }
