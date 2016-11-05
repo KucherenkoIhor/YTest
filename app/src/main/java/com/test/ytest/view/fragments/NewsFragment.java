@@ -82,6 +82,7 @@ public class NewsFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mLifecycleHandler = LoaderLifecycleHandler.create(
                 getActivity(),
                 getActivity().getSupportLoaderManager());
